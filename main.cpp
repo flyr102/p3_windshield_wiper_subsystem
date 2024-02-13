@@ -50,6 +50,7 @@ int main(){
 
 //=====[Implementations of public functions]===================================
 
+//Activates Inputs Declared Above
 void inputsInit()
 {
     driverSeat.mode(PullDown);
@@ -61,12 +62,16 @@ void inputsInit()
     sirenPin.input();
 }
 
+//Activates Inputs Declared Above
 void outputsInit() 
 {
     ignitionLed = OFF;
     engineLed = OFF;
 }
 
+/*Controls the driver welcome message. Boolean "driverWelcomeMessageSent" prevents
+infinite output of message. 
+*/
 void driverWelcomeUpdate(){
     if (driverSeat){
         if (!driverWelcomeMessageSent) {
@@ -79,6 +84,7 @@ void driverWelcomeUpdate(){
     }
 }
 
+//Modifies ignition state if specified conditions are met. Controls ignitionLed.
 void ignitionActivationUpdate() 
 {
     if (driverSeat && driverBelt && passengerSeat && passengerBelt && !engineState){
@@ -90,6 +96,7 @@ void ignitionActivationUpdate()
     ignitionLed = ignitionState;
 }
 
+//Modifies engine state if specifed conditions are met. Controls engineLed and siredPin.
 void engineActivationUpdate(){
     if (ignitionState && ignitionButton){
         ignitionState = OFF;
@@ -101,16 +108,16 @@ void engineActivationUpdate(){
         sirenPin = LOW;   
         alarmState = ON;
         uartUsb.write("Ignition inhibited\r\n", 20);
-        if (driverSeat){
+        if (!driverSeat){
             uartUsb.write("Driver seat not occupied.\r\n", 27);
         }
-        if (driverBelt){
+        if (!driverBelt){
             uartUsb.write("Driver seatbelt not fastened.\r\n", 31);
         }
-        if (passengerSeat){
+        if (!passengerSeat){
             uartUsb.write("Passenger seat not occupied.\r\n", 30);
         }
-        if (passengerBelt){
+        if (!passengerBelt){
             uartUsb.write("Passenger seatbelt not fastened.\r\n", 34);
         }
     }

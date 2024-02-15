@@ -3,35 +3,27 @@
 #include "mbed.h"
 #include "arm_book_lib.h"
 
+#include "car_system.h"
+
 //=====[Defines]===============================================================
+
+//=====[Declaration of public data types]======================================
 
 //=====[Declaration and initialization of public global objects]===============
 
-DigitalIn driverSeat (D7);
-DigitalIn driverBelt (D6);
-DigitalIn passengerSeat (D5);
-DigitalIn passengerBelt (D4);
-DigitalIn ignitionButton (D3);
-
-DigitalOut ignitionLed (LED1);
-DigitalOut engineLed (LED2);
-
-DigitalInOut sirenPin(PE_10);
-
-UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
-
 //=====[Declaration and initialization of public global variables]=============
-
-bool alarmState = OFF;
-bool ignitionState = OFF;
-bool engineState = OFF;
-bool driverWelcomeMessageSent = false;
 
 //=====[Declarations (prototypes) of public functions]=========================
 
 void inputsInit();
 void outputsInit();
-void driverWelcomeUpdate();
+void ignitionActivationUpdate();
+void windshieldWiperCycle();
+
+//=====[Declarations (prototypes) of public functions]=========================
+
+void inputsInit();
+void outputsInit();
 void ignitionActivationUpdate();
 void engineActivationUpdate();
 
@@ -40,11 +32,13 @@ void engineActivationUpdate();
 int main(){
     inputsInit();
     outputsInit();
-    while (!engineState && !alarmState)
+    carSystemInit();
+    while (true)
     {
-        driverWelcomeUpdate();
         ignitionActivationUpdate();
         engineActivationUpdate();
+        carSystemUpdate();
+        windshieldWiperCycle();
     }
 }
 
@@ -53,13 +47,8 @@ int main(){
 //Activates Inputs Declared Above
 void inputsInit()
 {
-    driverSeat.mode(PullDown);
-    driverBelt.mode(PullDown);
-    passengerSeat.mode(PullDown);
-    passengerBelt.mode(PullDown);
+    driverSeatSensor.mode(PullDown);
     ignitionButton.mode(PullDown);
-    sirenPin.mode(OpenDrain);
-    sirenPin.input();
 }
 
 //Activates Inputs Declared Above
@@ -69,58 +58,25 @@ void outputsInit()
     engineLed = OFF;
 }
 
-/*Controls the driver welcome message. Boolean "driverWelcomeMessageSent" prevents
-infinite output of message. 
-*/
-void driverWelcomeUpdate(){
-    if (driverSeat){
-        if (!driverWelcomeMessageSent) {
-            uartUsb.write ("Welcome to enhanced alarm system model 218-W24\r\n", 48);
-            driverWelcomeMessageSent = true;
-        }
-    }
-    else if (!driverSeat){
-        driverWelcomeMessageSent = false;
-    }
-}
-
 //Modifies ignition state if specified conditions are met. Controls ignitionLed.
 void ignitionActivationUpdate() 
 {
-    if (driverSeat && driverBelt && passengerSeat && passengerBelt && !engineState){
+    if (driverSeatSensor && !engineState){
         ignitionState = ON;
     }
-    else if (!driverSeat || !driverBelt || !passengerSeat || !passengerBelt || engineState){
+    else if (!driverSeatSensor || engineState){
         ignitionState = OFF;
     }
     ignitionLed = ignitionState;
 }
 
-//Modifies engine state if specifed conditions are met. Controls engineLed and siredPin.
-void engineActivationUpdate(){
-    if (ignitionState && ignitionButton){
-        ignitionState = OFF;
-        engineState = ON;
-        uartUsb.write("Engine started.\r\n", 17);
+void windshieldWiperCycle(){
+    servo.period(PERIOD); // 20ms period
+    servo.write(DUTY_MIN);
+    while(true){
+        servo.write(DUTY_MIN);
+        delay(3000);
+        servo.write(DUTY_MAX);
+        delay(3000);
     }
-    else if (!ignitionState && ignitionButton){
-        sirenPin.output();                                     
-        sirenPin = LOW;   
-        alarmState = ON;
-        uartUsb.write("Ignition inhibited\r\n", 20);
-        if (!driverSeat){
-            uartUsb.write("Driver seat not occupied.\r\n", 27);
-        }
-        if (!driverBelt){
-            uartUsb.write("Driver seatbelt not fastened.\r\n", 31);
-        }
-        if (!passengerSeat){
-            uartUsb.write("Passenger seat not occupied.\r\n", 30);
-        }
-        if (!passengerBelt){
-            uartUsb.write("Passenger seatbelt not fastened.\r\n", 34);
-        }
-    }
-    ignitionLed = ignitionState;
-    engineLed = engineState;
 }

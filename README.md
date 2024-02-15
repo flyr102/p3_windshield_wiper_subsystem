@@ -7,6 +7,22 @@ In this project, we designed a comprehensive windshield wiper control system for
 
 
 ## **Code:**
-As you can see, we modularized our code for better understandability and maintainability. 
+As you can see, we modularized our code for better understandability and maintainability. Our project is split into 8 modules as follows:
+1. car_system
+   * This module 
+2. code
+   * This module
+3. display
+   * This module
+4. engine
+   * This module
+5. ignition
+    * This module
+6. matrix_keypad
+    * This module
+7. user_interface
+    * This module
+8. windshield_wipers
+    * This module
 
 ## **Testing Results:**

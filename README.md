@@ -8,3 +8,5 @@ In this project, we designed a comprehensive windshield wiper control system for
 
 ### **Code:**
 As you can see, we modularized our code for better understandability and maintainability. 
+
+#### **Testing Results:**

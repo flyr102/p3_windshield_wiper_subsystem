@@ -11,7 +11,7 @@ As you can see, we modularized our code for better understandability and maintai
 1. car_system
    * This module appropriates the car system's needs by initializing the inputs and outputs as well as setting the desired behaviors of the overall system.
 2. code
-   * This module ties in all of our modules to work hand in hand.
+   * This module works with the user interface module and matrix keypad module to interpret the inputted sequence. 
 3. display
    * This module sets up the LCD Display to output the correct messages.
 4. engine
@@ -23,6 +23,8 @@ As you can see, we modularized our code for better understandability and maintai
 7. user_interface
     * This module controls and creates what the user sees and interacts with.
 8. windshield_wipers
-    * This module controls the windshield wipers and all its modes in the system. 
+    * This module controls the windshield wipers and all its modes in the system.
+
+All of these modules are then tied in to work together in the main.cpp file. 
 
 ## **Testing Results:**

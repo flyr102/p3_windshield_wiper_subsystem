@@ -32,4 +32,10 @@ All of these modules are then tied in to work together in the main.cpp file.
 
 | Test                | Pass/Fail           | Comment             |
 |:-------------------:|:-------------------:|:-------------------:|
-| Start the engine (i.e., light the blue LED) while the driver’s seat is occupied and when the ignition button is pushed and then released | Pass| Passed |
+| Start the engine (i.e., light the blue LED) while the driver’s seat is occupied and when the ignition button is pushed and then released | Pass | Passed |
+
+
+### **Windshield Wiper Subsystem**
+| Test                | Pass/Fail           | Comment             |
+|:-------------------:|:-------------------:|:-------------------:|
+|Engine running, and the user selects HI, LO, INT, or OFF, the wipers run the appropriate mode| Pass | Comment |

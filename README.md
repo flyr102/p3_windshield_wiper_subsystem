@@ -9,20 +9,20 @@ In this project, we designed a comprehensive windshield wiper control system for
 ## **Code:**
 As you can see, we modularized our code for better understandability and maintainability. Our project is split into 8 modules as follows:
 1. car_system
-   * This module 
+   * This module appropriates the car system's needs by initializing the inputs and outputs as well as setting the desired behaviors of the overall system.
 2. code
-   * This module
+   * This module ties in all of our modules to work hand in hand.
 3. display
-   * This module
+   * This module sets up the LCD Display to output the correct messages.
 4. engine
-   * This module
+   * This module controls the engine, its setup, and outputs.
 5. ignition
-    * This module
+    * This module sets up the parameters needed to start the car and its correlating outputs.
 6. matrix_keypad
-    * This module
+    * This module codes the matrix keypad to work and the accepted values.
 7. user_interface
-    * This module
+    * This module controls and creates what the user sees and interacts with.
 8. windshield_wipers
-    * This module
+    * This module controls the windshield wipers and all its modes in the system. 
 
 ## **Testing Results:**

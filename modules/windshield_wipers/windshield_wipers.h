@@ -15,6 +15,11 @@
 
 void windshieldWipersInit();
 void windshieldWipersUpdate();
+int getWiperMode();
+int getWiperIntSetting();
+void updateWipers();
+void wiperInit();
+void servoUpdate(float dutyCycle);
 
 //=====[#include guards - end]=================================================
 

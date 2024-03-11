@@ -6,8 +6,9 @@
 #include "user_interface.h"
 
 #include "car_system.h"
-#include "code.h"
-#include "matrix_keypad.h"
+
+#include "windshield_wipers.h"
+#include "engine.h"
 #include "display.h"
 
 //=====[Declaration of private defines]========================================
@@ -19,13 +20,11 @@
 //=====[Declaration and initialization of public global objects]===============
 
 DigitalOut incorrectCodeLed(LED3);
-DigitalOut systemBlockedLed(LED2);
+
 
 //=====[Declaration of external public global variables]=======================
 
 //=====[Declaration and initialization of public global variables]=============
-
-char codeSequenceFromUserInterface[CODE_NUMBER_OF_KEYS];
 
 //=====[Declaration and initialization of private global variables]============
 
@@ -48,105 +47,60 @@ static void userInterfaceDisplayUpdate();
 
 void userInterfaceInit()
 {
-    incorrectCodeLed = OFF;
-    systemBlockedLed = OFF;
-    matrixKeypadInit( SYSTEM_TIME_INCREMENT_MS );
     userInterfaceDisplayInit();
 }
 
 void userInterfaceUpdate()
 {
-    userInterfaceMatrixKeypadUpdate();
-    incorrectCodeIndicatorUpdate();
-    systemBlockedIndicatorUpdate();
     userInterfaceDisplayUpdate();
-}
-
-bool incorrectCodeStateRead()
-{
-    return incorrectCodeState;
-}
-
-void incorrectCodeStateWrite( bool state )
-{
-    incorrectCodeState = state;
-}
-
-bool systemBlockedStateRead()
-{
-    return systemBlockedState;
-}
-
-void systemBlockedStateWrite( bool state )
-{
-    systemBlockedState = state;
-}
-
-bool userInterfaceCodeCompleteRead()
-{
-    return codeComplete;
-}
-
-void userInterfaceCodeCompleteWrite( bool state )
-{
-    codeComplete = state;
 }
 
 //=====[Implementations of private functions]==================================
 
-static void userInterfaceMatrixKeypadUpdate()
-{
-    static int numberOfHashKeyReleased = 0;
-    char keyReleased = matrixKeypadUpdate();
-
-    if( keyReleased != '\0' ) {
-
-        if(!systemBlockedStateRead() ) {
-            if( !incorrectCodeStateRead() ) {
-                codeSequenceFromUserInterface[numberOfCodeChars] = keyReleased;
-                numberOfCodeChars++;
-                if ( numberOfCodeChars >= CODE_NUMBER_OF_KEYS ) {
-                    codeComplete = true;
-                    numberOfCodeChars = 0;
-                }
-            } else {
-                if( keyReleased == '#' ) {
-                    numberOfHashKeyReleased++;
-                    if( numberOfHashKeyReleased >= 2 ) {
-                        numberOfHashKeyReleased = 0;
-                        numberOfCodeChars = 0;
-                        codeComplete = false;
-                        incorrectCodeState = OFF;
-                    }
-                }
-            }
-        }
-    }
-}
 
 static void userInterfaceDisplayInit()
 {
     displayInit();
      
-    displayCharPositionWrite ( 0,0 );
-    displayStringWrite( "Wiper Mode:" );
-    
-    displayCharPositionWrite ( 0,1 );
-    displayStringWrite( "OFF" );
+    displayCharPositionWrite(0,0);
+    displayStringWrite("WIPERS:");
+
+    displayCharPositionWrite(0,1);
+    displayStringWrite("                ");
 }
 
 static void userInterfaceDisplayUpdate()
 {
-    displayCharPositionWrite ( 0,1 );
-    displayStringWrite( "ON " );
-}
+    switch(getWiperMode()){
+        case 0 : 
+        displayCharPositionWrite(8,0);
+        displayStringWrite("OFF"); break;
+        case 1 : 
+        displayCharPositionWrite(8,0);
+        displayStringWrite("LOW"); break;
+        case 2 :
+        displayCharPositionWrite(8,0);
+        displayStringWrite("INT"); break;
+        case 3 :
+        displayCharPositionWrite(8,0);
+        displayStringWrite("ON "); break;
+        default : 
+        displayCharPositionWrite(0,0);
+        displayStringWrite("WIPERS:"); break;
+    }
 
-static void incorrectCodeIndicatorUpdate()
-{
-    incorrectCodeLed = incorrectCodeStateRead();
-}
-
-static void systemBlockedIndicatorUpdate()
-{
-    systemBlockedLed = systemBlockedState;
+    switch(getWiperIntSetting()){
+        case 0 :
+        displayCharPositionWrite(0,1);
+        displayStringWrite("FREQ: 3 sec"); break;
+        case 1 : 
+        displayCharPositionWrite(0,1);
+        displayStringWrite("FREQ: 5 sec"); break;
+        case 2 :
+        displayCharPositionWrite(0,1);
+        displayStringWrite("FREQ: 8 sec"); break;
+        default: 
+        displayCharPositionWrite(0,1);
+        displayStringWrite("                "); break;
+    }
 }

@@ -1,5 +1,4 @@
 //=====[#include guards - begin]===============================================
-
 #ifndef _IGNITION_H_
 #define _IGNITION_H_
 
@@ -11,6 +10,8 @@
 
 void ignitionInit();
 void ignitionUpdate();
+bool getIgnitionState();
+bool getIgnitionButtonUpdate();
 
 //=====[#include guards - end]=================================================
 

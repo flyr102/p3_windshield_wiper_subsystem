@@ -12,35 +12,62 @@
 
 //=====[Declaration of private data types]=====================================
 
+typedef enum {
+   WAIT,
+   BUTTON_PRESSED,
+   BUTTON_RELEASED
+} ignitionButtonState_t;
+
 //=====[Declaration and initialization of public global objects]===============
+
+DigitalOut engineLed(LED2);
 
 //=====[Declaration of external public global variables]=======================
 
-bool engineState = OFF;
-
 //=====[Declaration and initialization of public global variables]=============
+
+bool engineState = false;
 
 //=====[Declaration and initialization of private global variables]============
 
 //=====[Declarations (prototypes) of private functions]========================
 
+static bool engineButtonUpdate();
+static void inputsInit();
+static void outputsInit();
+
 //=====[Implementations of public functions]===================================
 
-//Modifies engine state if specifed conditions are met. Controls engineLed and siredPin.
-void engineActivationUpdate(){
-    if (ignitionState && ignitionButton){
-        ignitionState = OFF;
-        engineState = ON;
-        uartUsb.write("Engine started.\r\n", 17);
+void engineInit(){
+    inputsInit();
+    outputsInit();
+}
+
+void engineUpdate(){ 
+    ignitionUpdate();
+    if (getIgnitionState() && getIgnitionButtonUpdate()){
+        engineState = true;
     }
-    else if (!ignitionState && ignitionButton){
-        uartUsb.write("Ignition inhibited\r\n", 20);
-        if (!driverSeatSensor){
-            uartUsb.write("Driver seat not occupied.\r\n", 27);
-        }
+    else if (engineState && getIgnitionButtonUpdate()){
+        engineState = false;
     }
-    ignitionLed = ignitionState;
     engineLed = engineState;
 }
 
+bool getEngineState(){
+    return engineState;
+}
+
 //=====[Implementations of private functions]==================================
+
+static void inputsInit(){
+    ignitionInit();
+}
+
+static void outputsInit(){
+    engineLed = OFF;
+}
+
+static void engineLedUpdate(){
+    engineLed = engineState;
+}

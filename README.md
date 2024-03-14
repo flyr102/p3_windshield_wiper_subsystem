@@ -32,10 +32,15 @@ All of these modules are then tied in to work together in the main.cpp file.
 
 | Test                | Pass/Fail           | Comment             |
 |:-------------------:|:-------------------:|:-------------------:|
-| Start the engine (i.e., light the blue LED) while the driver’s seat is occupied and when the ignition button is pushed and then released | Pass | Passed |
+| Start the engine (i.e., light the blue LED) while the driver’s seat is occupied and when the ignition button is pushed and then released | Pass |  |
+| Nothing happens when the ignition buttons is pressed when the driver isn't sitting down in the seat | Pass | |
+| Engine light remains on even when driver is no longer sitting down in seat | Pass | |
+| Pressing the ignition button while the engine is on deactivates the engine | Pass | |
 
 
 ### **Windshield Wiper Subsystem**
 | Test                | Pass/Fail           | Comment             |
 |:-------------------:|:-------------------:|:-------------------:|
-|Engine running, and the user selects HI, LO, INT, or OFF, the wipers run the appropriate mode| Pass | Comment |
+| Engine running, and the user selects HI, LO, INT, or OFF, the wipers run the appropriate mode| Pass |  |
+| Wipers can change delay time during already active delay period, not reseting the wipe delay to the new delay time | Pass |  |
+| Engine can be turned off during high, low wipe cycles mid wipe | Fail | Not enough time was allotted to add this feature. Delay is hard coded into wiper system. |

@@ -24,7 +24,6 @@
 int main(){
     carSystemInit();
     while(true){
-        //servoUpdate(0.046);
         carSystemUpdate();
     }
 }

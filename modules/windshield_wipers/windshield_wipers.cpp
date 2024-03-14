@@ -27,8 +27,8 @@
 #define DUTY_MAX 0.088
 #define PERIOD 0.02
 
-#define INCREMENT 20 //amount of increments the low state cycles through
-#define DELAY_TIME_MS 300 //amount of time it takes for the low mode to sweep one way
+#define INCREMENT 20
+#define DELAY_TIME_MS 300
 
 //=====[Declaration of private data types]=====================================
 
@@ -133,7 +133,7 @@ void updateIntSetting(){
     }
 }
 
-static void cycleWipers(){ //FSM that implements cycling the wipers 
+static void cycleWipers(){
 
    switch(windshieldWiperState){
         case REST :
@@ -172,7 +172,7 @@ static void cycleWipers(){ //FSM that implements cycling the wipers
             }
         break;
     
-        case INT_DELAY : //implements the wait time in the inctermittent mode
+        case INT_DELAY :
             switch(wiperDelay){
                 case 0 :  
                 if (accumulatedIntTimeAlarm >= DELAY_3_MS){
